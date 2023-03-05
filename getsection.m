@@ -1,4 +1,4 @@
-function subG = getSection(G, xrange, yrange, zrange)
+function subG = getsection(G, xrange, yrange, zrange)
 % DESCRIPTION: 
 % Make subgraph from nodes within XYZ ranges specified
 

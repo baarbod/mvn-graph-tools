@@ -1,4 +1,4 @@
-function cn = encode_cn(varargin)
+function cn = encodecn(varargin)
 % DESCRIPTION:
 % Compute a unique integar using 2 oe 3 integers
 
@@ -18,7 +18,7 @@ switch nargin
         y = int64(varargin{2});
         z = int64(varargin{3});
         cn2 = (y + z + 1).*(y + z)/2 + z;
-        cn = cnEncode2(x, cn2);
+        cn = (x + cn2 + 1).*(x + cn2)/2 + cn2;
 end
 
 

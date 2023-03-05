@@ -16,24 +16,24 @@ data = co;
 segperart = 1;
 segperven = 1;
 segperother = 1;
-Gfull = formatKleinfeld(data, segperart, segperven, segperother);
+Gfull = formatkleinfeld(data, segperart, segperven, segperother);
 Gfull.Nodes.Z = -Gfull.Nodes.Z;
 figure, plotgraph(Gfull)
 G = Gfull;
 
 %% Run automatic pial identification routine
 
-Gnew = auto_find_pial(G);
+Gnew = autofindpial(G);
 
 %% Manually define the remaining vessels types
 n1 = 31;
 n2 = 61;
-[nodepath, edgepath] = findNodePath(Gnew, subGnew_surface_art, n1, n2);
+[nodepath, edgepath] = findnodepath(Gnew, subGnew_surface_art, n1, n2);
 Gnew.Edges.Type(edgepath) = 3;
 figure, plotgraph(Gnew);
 view(2)
 
-function Gnew = auto_find_pial(Gfull)
+function Gnew = autofindpial(Gfull)
 %% Identify pial vessels based on diving vessel tips
 
 G = Gfull;
@@ -79,13 +79,13 @@ set(gcf, 'Units', 'Normalized')
 set(gcf, 'Position', figsize)
 
 %% Create a subgraph of the identified pial vessels
-subG = subFromEdge(G, find(G.Edges.Type > 2));
+subG = subfromedge(G, find(G.Edges.Type > 2));
 subplot(2, 2, 1), plotgraph(subG)
 view(2)
 title('Step 1 - First pass')
 
 %% Create another cleaned up subgraph without small diameter vessels
-subG2 = subFromEdge(subG, find(subG.Edges.D > 6));
+subG2 = subfromedge(subG, find(subG.Edges.D > 6));
 subplot(2, 2, 2), plotgraph(subG2);
 view(2)
 title('Step 2 - Small diameter vessels removed')
@@ -129,12 +129,12 @@ sgtitle('Network plots for visual inspection')
 xrange = [];
 yrange = [];
 zrange = [-400, 0];
-subGnew_surface_art = getSection(Gnew, xrange, yrange, zrange);
+subGnew_surface_art = getsection(Gnew, xrange, yrange, zrange);
 cond1 = subGnew_surface_art.Edges.Type ~= 2; % omit venules
 cond2 = subGnew_surface_art.Edges.Type ~= 4; % omit veins
 cond3 = subGnew_surface_art.Edges.D > 6; % keep larger vessels
 ind2keep = find(cond1 & cond2 & cond3);
-subGnew_surface_art = subFromEdge(subGnew_surface_art, ind2keep);
+subGnew_surface_art = subfromedge(subGnew_surface_art, ind2keep);
 subplot(2, 1, 1), plotgraph(subGnew_surface_art);
 view(2)
 
@@ -142,12 +142,12 @@ view(2)
 xrange = [];
 yrange = [];
 zrange = [-400, 0];
-subGnew_surface_ven = getSection(Gnew, xrange, yrange, zrange);
+subGnew_surface_ven = getsection(Gnew, xrange, yrange, zrange);
 cond1 = subGnew_surface_ven.Edges.Type ~= 1; % omit arterioles
 cond2 = subGnew_surface_ven.Edges.Type ~= 3; % omit arteries
 cond3 = subGnew_surface_ven.Edges.D > 6; % keep larger vessels
 ind2keep = find(cond1 & cond2 & cond3);
-subGnew_surface_ven = subFromEdge(subGnew_surface_ven, ind2keep);
+subGnew_surface_ven = subfromedge(subGnew_surface_ven, ind2keep);
 subplot(2, 1, 2), plotgraph(subGnew_surface_ven);
 view(2)
 

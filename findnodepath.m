@@ -1,4 +1,4 @@
-function [nodepath, edgepath] = findNodePath(G, subG, n1, n2)
+function [nodepath, edgepath] = findnodepath(G, subG, n1, n2)
 % DESCRIPTION:
 % Converts a nodepath of a subgraph into the corresponding nodepath
 % of the main graph.
@@ -11,6 +11,7 @@ function [nodepath, edgepath] = findNodePath(G, subG, n1, n2)
 
 % OUTPUT:
 % nodepath --- vector of node IDs from the main graph
+% edgepath  --- vector of edge IDs from the main graph
 
 [subpath, ~, subedgepath] = shortestpath(subG, n1, n2);
 
@@ -22,8 +23,9 @@ for i = 1:numel(cnsubpath)
    iCN = cnsubpath(i);
    nodepath(i) = find(G.Nodes.CN == iCN);
 end
-% nodepath = find(ismember(G.Nodes.CN, cnsubpath));
 
 if nargout > 1
     edgepath = find(ismember(G.Edges.CN, cnedgepath));
 end
+
+

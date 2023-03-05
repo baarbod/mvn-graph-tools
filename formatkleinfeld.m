@@ -1,4 +1,4 @@
-function G = formatKleinfeld(data, segperart, segperven, segperother)
+function G = formatkleinfeld(data, segperart, segperven, segperother)
 % DESCRIPTION:
 % Converts original data from kleinfeld into a graph object.
 
@@ -107,7 +107,7 @@ for istrand = 1:nstrand
         col(iedge) = next;
         L(iedge) = norm(xyz(inod,:)-xyz(next,:));
         D(iedge) = 2*rc;
-        CN_edge(iedge) = cnEncode2(inod,next);
+        CN_edge(iedge) = encodecn(inod,next);
           
         P1 = xyz(inod,:);
         P2 = xyz(next,:);
@@ -116,14 +116,14 @@ for istrand = 1:nstrand
         Y(inod) = y1;
         Z(inod) = z1;
         
-        CN_node(inod) = cnEncode3(x1,y1,z1);
+        CN_node(inod) = encodecn(x1,y1,z1);
         
         x2 = P2(1); y2 = P2(2); z2 = P2(3);
         X(next) = x2;
         Y(next) = y2;
         Z(next) = z2;
         
-        CN_node(next) = cnEncode3(x2,y2,z2);
+        CN_node(next) = encodecn(x2,y2,z2);
         
         if ismember(istrand,artStrandList)
             TYPE(iedge) = 1;
