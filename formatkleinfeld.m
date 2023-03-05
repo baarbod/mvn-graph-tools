@@ -16,11 +16,11 @@ name = inputname(1);
 network = data;
 xyz = double(network.vectorizedStructure.Vertices.AllVerts);
 
-if strcmp(name,'au')
-    structcol = 3;
-else
+% if strcmp(name,'au')
+%     structcol = 3;
+% else
     structcol = 4;
-end
+% end
 
 temp = struct2cell(network.vectorizedStructure.Strands.').';
 strandList = struct('StartToEndIndices', temp(:,structcol));
@@ -164,43 +164,4 @@ EdgeTable = table([row col],ones(numel(row),1),L,D,TYPE,CN_edge,...
 NodeTable = table(X,Y,Z,CN_node, 'VariableNames',{'X' 'Y' 'Z' 'CN'});
 
 G = graph(EdgeTable,NodeTable);
-
-deglist = degree(G);
-figure, histogram(deglist)
-G = rmnode(G,find(deglist==0));
-G = rmedge(G, 1:numnodes(G), 1:numnodes(G));
-edgelist = G.Edges{:,1};
-[~,bi,~] = unique(edgelist, 'rows');
-remedgeind = find(~ismember(1:numedges(G),bi));
-G = rmedge(G, remedgeind);
-
-xyz = [G.Nodes.X, G.Nodes.Y, G.Nodes.Z];
-figure, H = plot(G,'XData',xyz(:,1),'YData',xyz(:,2),'ZData',xyz(:,3));
-highlight(H,find(deglist==1),'MarkerSize',5,'Marker','s','NodeColor','g')
-title("Degree 1 nodes labeled green")
-
-iart = find(G.Edges.Type == 1);
-iven = find(G.Edges.Type == 2);
-icap = find(G.Edges.Type == 0);
-
-fig = figure; H = plot(G,'XData',G.Nodes.X,'YData',G.Nodes.Y,'ZData',G.Nodes.Z,...
-    'MarkerSize',0.001);
-fig.Color = 'w';
-highlight(H,'Edges',iart,'EdgeColor','b','LineWidth',2)
-highlight(H,'Edges',iven,'EdgeColor','r','LineWidth',2)
-highlight(H,'Edges',icap,'EdgeColor',[0.25, 0.25, 0.25],'LineWidth',0.5)
-ax = gca;
-ax.FontWeight = 'bold';
-ax.FontName = 'Times New Roman';
-ax.Title.String = 'Arteriole: Red, Venuole: Blue, Other: Green';
-ax.Title.FontSize = 14;
-ax.AmbientLightColor = 'magenta';
-ax.XGrid = 'off';
-ax.YGrid = 'off';
-ax.ZGrid = 'off';
-ax.XAxis.Label.String = 'x (\mum)';
-ax.YAxis.Label.String = 'y (\mum)';
-ax.ZAxis.Label.String = 'z (\mum)';
-axis equal
-box off
 
