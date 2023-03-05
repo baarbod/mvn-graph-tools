@@ -1,4 +1,4 @@
-function Gnew = autofindpial(Gfull)
+function [Gnew, Gart, Gven] = autofindpial(Gfull)
 % DESCRIPTION:
 % Automatically identify pial vessels
 
@@ -123,6 +123,9 @@ ind2keep = find(cond1 & cond2 & cond3);
 subGnew_surface_ven = subfromedge(subGnew_surface_ven, ind2keep);
 subplot(2, 1, 2), plotgraph(subGnew_surface_ven);
 view(2)
+
+Gart = subGnew_surface_art;
+Gven = subGnew_surface_ven;
 
 end
 
