@@ -5,7 +5,7 @@ clear, clc, close all
 addpath(genpath(pwd))
 
 % load full network with pials
-dat = load('networks/db_with_pial');
+dat = load('data/graphs/db_with_pial');
 G0 = dat.G;
 figure, plotgraph(G0)
 
