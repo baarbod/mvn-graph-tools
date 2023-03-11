@@ -36,10 +36,14 @@ for iedge = 1:G.numedges
             % assign the edge type based on type of these connected edges
             if any(connected_types == 1)
                 G.Edges.Type(iedge) = 3; % pial arteries
+                G.Nodes.Type(n1) = 3;
+                G.Nodes.Type(n2) = 3;
             end
             
             if any(connected_types == 2)
                 G.Edges.Type(iedge) = 4; % pial veins
+                G.Nodes.Type(n1) = 4;
+                G.Nodes.Type(n2) = 4;
             end
         end
         
@@ -48,7 +52,7 @@ end
 
 figsize = [0.2063, 0.1903, 0.4977, 0.7083];
 
-% creat figure for plotting results of processing steps
+% Create figure for plotting results of processing steps
 figure, set(gca, 'Color', 'w')
 set(gcf, 'Units', 'Normalized')
 set(gcf, 'Position', figsize)
@@ -82,13 +86,20 @@ title('Step 3 - Smaller connected components removed')
 
 % Redefine pial vessel types in full graph
 Gnew = Gfull;
-CN_pial_art = subG2.Edges.CN(subG2.Edges.Type == 3);
-CN_pial_ven = subG2.Edges.CN(subG2.Edges.Type == 4);
-CN_orig = Gfull.Edges.CN;
-[~, ~, pial_art_ind_full_graph] = intersect(CN_pial_art, CN_orig);
-[~, ~, pial_ven_ind_full_graph] = intersect(CN_pial_ven, CN_orig);
-Gnew.Edges.Type(pial_art_ind_full_graph) = 3;
-Gnew.Edges.Type(pial_ven_ind_full_graph) = 4;
+CN_orig_edges = Gfull.Edges.CN;
+CN_pial_art_edges = subG2.Edges.CN(subG2.Edges.Type == 3);
+CN_pial_ven_edges = subG2.Edges.CN(subG2.Edges.Type == 4);
+[~, ~, art_edges] = intersect(CN_pial_art_edges, CN_orig_edges);
+[~, ~, ven_edges] = intersect(CN_pial_ven_edges, CN_orig_edges);
+Gnew.Edges.Type(art_edges) = 3;
+Gnew.Edges.Type(ven_edges) = 4;
+CN_orig_nodes = Gfull.Nodes.CN;
+CN_pial_art_nodes = subG2.Nodes.CN(subG2.Nodes.Type == 3);
+CN_pial_ven_nodes = subG2.Nodes.CN(subG2.Nodes.Type == 4);
+[~, ~, art_nodes] = intersect(CN_pial_art_nodes, CN_orig_nodes);
+[~, ~, ven_nodes] = intersect(CN_pial_ven_nodes, CN_orig_nodes);
+Gnew.Nodes.Type(art_nodes) = 3;
+Gnew.Nodes.Type(ven_nodes) = 4;
 subplot(2, 2, 4), plotgraph(Gnew);
 view(2)
 title('Step 4 - Reregistered to original full graph')
