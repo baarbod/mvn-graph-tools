@@ -182,6 +182,8 @@ NodeTable = table(X,Y,Z,ntype, CN_node, ...
 
 G = graph(EdgeTable,NodeTable);
 
+% remove self-loops
+G = rmedge(G, 1:numnodes(G), 1:numnodes(G));
 end
 
 function nodes = down_sample_strand(nodes, nseg)
