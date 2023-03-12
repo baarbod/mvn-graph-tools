@@ -84,9 +84,11 @@ for istrand = 1:nstrand
     if ismember(istrand,artStrandList)
         nodes = down_sample_strand(nodes, segperart);
         type = 1;
+    % if venule strand
     elseif ismember(istrand,venStrandList)
         nodes = down_sample_strand(nodes, segperven);
         type = 2;
+    % if neither arteriole nor venule strand
     elseif ismember(istrand,otherStrandList)
         nodes = down_sample_strand(nodes, segperother);
         type = 0;
@@ -99,18 +101,8 @@ for istrand = 1:nstrand
     for iter = 1:length(nodes)-1
         
         % work on current node and next one
-        inod0 = find(ismember(ordered,nodes(iter)));
-        next0 = find(ismember(ordered,nodes(iter+1)));
         inod = nodes(iter);
         next = nodes(iter+1);
-        
-        if ~isequal(inod0, inod)
-            error('not equal')
-        end
-        
-        if ~isequal(next0, next)
-            error('not equal')
-        end
 
         if isempty(nodes) == 1
             break
