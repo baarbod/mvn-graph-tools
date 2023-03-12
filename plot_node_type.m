@@ -1,4 +1,8 @@
+
 clear, clc, close all
+
+% Add required paths
+addpath(genpath(pwd))
 
 % load graph object
 dat = load('data/graphs/db_with_pial.mat');
