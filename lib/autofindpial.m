@@ -12,47 +12,52 @@ function [Gnew, Gart, Gven] = autofindpial(Gfull)
 % Identify pial vessels based on diving vessel tips
 G = Gfull;
 
-% loop through edges
-for iedge = 1:G.numedges
+% predefine vectors to use in the main loop
+edges_type0 = find(G.Edges.Type == 0);
+end_nodes = G.Edges{:, 1};
+edge_types = G.Edges.Type;
+node_types = G.Nodes.Type;
+node_zcoords = G.Nodes.Z;
+
+% loop through type 0 edges
+for edgeID = edges_type0(:)'
     
-    % capillaries and pial vessels are type 0 at this stage
-    if G.Edges.Type(iedge) == 0
+    % grab endnodes and their coordinates
+    nodes = end_nodes(edgeID, :);
+    n1 = nodes(1);
+    n2 = nodes(2);
+    z1 = node_zcoords(n1);
+    z2 = node_zcoords(n2);
+    
+    % pial vessels are at the surface
+    if mean([z1, z2]) > -300
         
-        % grab endnodes and their coordinates
-        nodes = G.Edges{iedge, 1};
-        n1 = nodes(1);
-        n2 = nodes(2);
-        z1 = G.Nodes{n1, 3};
-        z2 = G.Nodes{n2, 3};
+        % find connected edges for each pial vessel endnode
+        eid1 = outedges(G,n1);
+        eid2 = outedges(G,n2);
+        connected_types = edge_types([eid1;eid2]);
         
-        % pial vessels are at the surface
-        if mean([z1, z2]) > -300
-            
-            % find connected edges for each pial vessel endnode
-            eid1 = outedges(G,n1);
-            eid2 = outedges(G,n2);
-            connected_types = G.Edges.Type([eid1;eid2]);
-            
-            % assign the edge type based on type of these connected edges
-            if any(connected_types == 1)
-                G.Edges.Type(iedge) = 3; % pial arteries
-                G.Nodes.Type(n1) = 3;
-                G.Nodes.Type(n2) = 3;
-            end
-            
-            if any(connected_types == 2)
-                G.Edges.Type(iedge) = 4; % pial veins
-                G.Nodes.Type(n1) = 4;
-                G.Nodes.Type(n2) = 4;
-            end
+        % assign the edge type based on type of these connected edges
+        if any(connected_types == 1)
+            edge_types(edgeID) = 3;
+            node_types(n1) = 3;
+            node_types(n2) = 3;
         end
         
+        if any(connected_types == 2)
+            edge_types(edgeID) = 4;
+            node_types(n1) = 4;
+            node_types(n2) = 4;
+        end
     end
 end
 
-figsize = [0.2063, 0.1903, 0.4977, 0.7083];
+% reassign to graph properties
+G.Edges.Type = edge_types;
+G.Nodes.Type = node_types;
 
 % Create figure for plotting results of processing steps
+figsize = [0.2063, 0.1903, 0.4977, 0.7083];
 figure, set(gca, 'Color', 'w')
 set(gcf, 'Units', 'Normalized')
 set(gcf, 'Position', figsize)
