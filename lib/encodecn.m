@@ -1,12 +1,12 @@
 function cn = encodecn(varargin)
 % DESCRIPTION:
-% Compute a unique integar using 2 oe 3 integers
+% Compute a unique integar using 2 or 3 integers
 
 % INPUT: 
-% x, y, z(optional) - numbers 
+% x, y, z (optional) - numbers 
 
 % OUTPUT: 
-% unique integer refered to as characteristic number
+% unique integer referred to as characteristic number
 
 switch nargin
     case 2
